@@ -159,7 +159,7 @@ ol {
   animation: pulse-text-size 2s infinite ease-out;
 }
 
-#game-board {
+/* #game-board {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -188,7 +188,7 @@ ol {
   cursor: pointer;
   font-family: 'Caprasimo', cursive;
   padding: 1rem;
-}
+} */
 
 #game-over {
   position: absolute;
