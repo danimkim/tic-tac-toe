@@ -1,12 +1,13 @@
-import Player from "./components/Player";
+import Player from './components/Player';
 
 function App() {
   return (
     <main>
+      <h1>Tic-Tac-Toe</h1>
       <div id="game-container">
         <ol id="players">
-          <Player name="Joe" symbol="X" />
-          <Player name="Tina" symbol="O" />
+          <Player defaultName="Player1" symbol="X" />
+          <Player defaultName="Player2" symbol="O" />
         </ol>
         GAME BOARD
       </div>
