@@ -107,7 +107,7 @@ h1 {
   font-weight: bold;
 }
 
-.player-name {
+/* .player-name {
   display: inline-block;
   width: 10rem;
   font-size: 1rem;
@@ -118,7 +118,7 @@ h1 {
   border-radius: 4px;
   text-overflow: ellipsis;
   text-align: center;
-}
+} */
 
 .player input {
   font: inherit;
@@ -132,11 +132,11 @@ h1 {
   text-transform: uppercase;
 }
 
-.player-symbol {
+/* .player-symbol {
   margin-left: 1rem;
   font-size: 1rem;
   color: #e1dec7;
-}
+} */
 
 ol {
   list-style: none;
