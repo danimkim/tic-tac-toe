@@ -1,14 +1,32 @@
 import { useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Player from './components/Player';
+import { PLAYER_1_MARK, PLAYER_2_MARK } from './constants';
 
 function App() {
-  const [activePlayer, setActivePlayer] = useState('X');
+  const [gameTurns, setGameTurns] = useState([]);
+  const [activePlayer, setActivePlayer] = useState(PLAYER_1_MARK);
 
-  const handleSelectSquare = () =>
+  const handleSelectSquare = (rowIdx, colIdx) => {
     setActivePlayer((currActivePlayer) =>
-      currActivePlayer === 'X' ? 'O' : 'X'
+      currActivePlayer === PLAYER_1_MARK ? PLAYER_2_MARK : PLAYER_1_MARK
     );
+
+    setGameTurns((prevTurns) => {
+      let currentPlayer = PLAYER_1_MARK;
+
+      if (prevTurns.length > 0 && prevTurns[0].player === PLAYER_1_MARK) {
+        currentPlayer = PLAYER_2_MARK;
+      }
+
+      const updatedTurns = [
+        { square: { row: rowIdx, col: colIdx }, player: currentPlayer },
+        ...prevTurns,
+      ];
+
+      return updatedTurns;
+    });
+  };
   return (
     <main>
       <h1>Tic-Tac-Toe</h1>
@@ -16,19 +34,16 @@ function App() {
         <ol id="players" className="highlight-player">
           <Player
             defaultName="Player1"
-            symbol="X"
-            isActive={activePlayer === 'X'}
+            symbol={PLAYER_1_MARK}
+            isActive={activePlayer === PLAYER_1_MARK}
           />
           <Player
             defaultName="Player2"
-            symbol="O"
-            isActive={activePlayer === 'O'}
+            symbol={PLAYER_2_MARK}
+            isActive={activePlayer === PLAYER_2_MARK}
           />
         </ol>
-        <GameBoard
-          onSelectSquare={handleSelectSquare}
-          activePlayerSymbol={activePlayer}
-        />
+        <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
       </div>
       LOG
     </main>
