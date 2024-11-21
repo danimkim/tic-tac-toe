@@ -13,13 +13,21 @@ function App() {
     <main>
       <h1>Tic-Tac-Toe</h1>
       <div id="game-container">
-        <ol id="players">
-          <Player defaultName="Player1" symbol="X" />
-          <Player defaultName="Player2" symbol="O" />
+        <ol id="players" className="highlight-player">
+          <Player
+            defaultName="Player1"
+            symbol="X"
+            isActive={activePlayer === 'X'}
+          />
+          <Player
+            defaultName="Player2"
+            symbol="O"
+            isActive={activePlayer === 'O'}
+          />
         </ol>
         <GameBoard
           onSelectSquare={handleSelectSquare}
-          activePlayer={activePlayer}
+          activePlayerSymbol={activePlayer}
         />
       </div>
       LOG
