@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import './Player.css';
 
-export default function Player({ defaultName, symbol, isActive }) {
+export default function Player({
+  defaultName,
+  symbol,
+  isActive,
+  onChangeName,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [playerName, setPlayerName] = useState(defaultName);
 
-  const toggleIsEditing = () => setIsEditing((prev) => !prev);
-  const handleChange = (e) => setPlayerName(e.target.value);
+  const handlePlayerNameChange = () => {
+    setIsEditing((prev) => !prev);
+
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
+  };
+  const handleInputChange = (e) => setPlayerName(e.target.value.toUpperCase());
 
   let editablePlayername = <span className="player-name">{playerName}</span>;
 
@@ -15,11 +26,11 @@ export default function Player({ defaultName, symbol, isActive }) {
       <input
         className=""
         placeholder={defaultName}
-        onChange={handleChange}
+        onChange={handleInputChange}
         value={playerName === defaultName ? '' : playerName}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            toggleIsEditing();
+            handlePlayerNameChange();
           }
         }}
       />
@@ -32,7 +43,9 @@ export default function Player({ defaultName, symbol, isActive }) {
         {editablePlayername}
         <span className="player-symbol">{symbol}</span>
       </span>
-      <button onClick={toggleIsEditing}>{isEditing ? 'Save' : 'Edit'}</button>
+      <button onClick={handlePlayerNameChange}>
+        {isEditing ? 'Save' : 'Edit'}
+      </button>
     </li>
   );
 }

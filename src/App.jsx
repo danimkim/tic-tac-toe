@@ -13,6 +13,10 @@ import GameOver from './components/GameOver';
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
+  const [players, setPlayers] = useState({
+    [PLAYER_1_MARK]: 'Player1',
+    [PLAYER_2_MARK]: 'Player2',
+  });
 
   const activePlayer = useMemo(
     () => deriveActivePlayer(gameTurns),
@@ -45,11 +49,17 @@ function App() {
       firstSquareSymbol === secontSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
 
-  const hasDraw = gameTurns.length === 9 && !winner;
+  const hasDraw = useMemo(
+    () => gameTurns.length === 9 && !winner,
+    [gameTurns, winner]
+  );
+
+  const handlePlayerNameChange = (symbol, name) =>
+    setPlayers((prev) => ({ ...prev, [symbol]: name }));
 
   const handleSelectSquare = (rowIdx, colIdx) => {
     setGameTurns((prevTurns) => {
@@ -72,14 +82,16 @@ function App() {
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            defaultName="Player1"
+            defaultName={'Player1'}
             symbol={PLAYER_1_MARK}
             isActive={activePlayer === PLAYER_1_MARK}
+            onChangeName={handlePlayerNameChange}
           />
           <Player
             defaultName="Player2"
             symbol={PLAYER_2_MARK}
             isActive={activePlayer === PLAYER_2_MARK}
+            onChangeName={handlePlayerNameChange}
           />
         </ol>
         {(winner || hasDraw) && (
