@@ -9,6 +9,7 @@ import {
 } from './constants';
 import Log from './components/Log';
 import { deriveActivePlayer } from './utils';
+import GameOver from './components/GameOver';
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
@@ -18,7 +19,7 @@ function App() {
     [gameTurns]
   );
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map((arr) => [...arr])];
 
   for (const turn of gameTurns) {
     const {
@@ -48,6 +49,8 @@ function App() {
     }
   }
 
+  const hasDraw = gameTurns.length === 9 && !winner;
+
   const handleSelectSquare = (rowIdx, colIdx) => {
     setGameTurns((prevTurns) => {
       const currentPlayer = deriveActivePlayer(prevTurns);
@@ -60,6 +63,9 @@ function App() {
       return updatedTurns;
     });
   };
+
+  const handleRestart = () => setGameTurns([]);
+
   return (
     <main>
       <h1>Tic-Tac-Toe</h1>
@@ -76,7 +82,9 @@ function App() {
             isActive={activePlayer === PLAYER_2_MARK}
           />
         </ol>
-        {winner && <p>You won, {winner}!</p>}
+        {(winner || hasDraw) && (
+          <GameOver winner={winner} onRestart={handleRestart} />
+        )}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
