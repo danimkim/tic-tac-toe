@@ -1,7 +1,12 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Player from './components/Player';
-import { PLAYER_1_MARK, PLAYER_2_MARK } from './constants';
+import {
+  initialGameBoard,
+  PLAYER_1_MARK,
+  PLAYER_2_MARK,
+  WINNING_COMBINATIONS,
+} from './constants';
 import Log from './components/Log';
 import { deriveActivePlayer } from './utils';
 
@@ -12,6 +17,36 @@ function App() {
     () => deriveActivePlayer(gameTurns),
     [gameTurns]
   );
+
+  let gameBoard = initialGameBoard;
+
+  for (const turn of gameTurns) {
+    const {
+      square: { row, col },
+      player,
+    } = turn;
+
+    gameBoard[row][col] = player;
+  }
+
+  let winner;
+
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol =
+      gameBoard[combination[0].row][combination[0].column];
+    const secontSquareSymbol =
+      gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol =
+      gameBoard[combination[2].row][combination[2].column];
+
+    if (
+      firstSquareSymbol &&
+      firstSquareSymbol === secontSquareSymbol &&
+      firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = firstSquareSymbol;
+    }
+  }
 
   const handleSelectSquare = (rowIdx, colIdx) => {
     setGameTurns((prevTurns) => {
@@ -41,7 +76,8 @@ function App() {
             isActive={activePlayer === PLAYER_2_MARK}
           />
         </ol>
-        <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
+        {winner && <p>You won, {winner}!</p>}
+        <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
     </main>
