@@ -1,24 +1,21 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Player from './components/Player';
 import { PLAYER_1_MARK, PLAYER_2_MARK } from './constants';
 import Log from './components/Log';
+import { deriveActivePlayer } from './utils';
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-  const [activePlayer, setActivePlayer] = useState(PLAYER_1_MARK);
+
+  const activePlayer = useMemo(
+    () => deriveActivePlayer(gameTurns),
+    [gameTurns]
+  );
 
   const handleSelectSquare = (rowIdx, colIdx) => {
-    setActivePlayer((currActivePlayer) =>
-      currActivePlayer === PLAYER_1_MARK ? PLAYER_2_MARK : PLAYER_1_MARK
-    );
-
     setGameTurns((prevTurns) => {
-      let currentPlayer = PLAYER_1_MARK;
-
-      if (prevTurns.length > 0 && prevTurns[0].player === PLAYER_1_MARK) {
-        currentPlayer = PLAYER_2_MARK;
-      }
+      const currentPlayer = deriveActivePlayer(prevTurns);
 
       const updatedTurns = [
         { square: { row: rowIdx, col: colIdx }, player: currentPlayer },
