@@ -42,7 +42,11 @@ function App() {
 
   return (
     <main>
-      <h1>Tic-Tac-Toe</h1>
+      <header>
+        <img src="game-logo.png" alt="tic tac toe logo" />
+        <h1>Tic-Tac-Toe</h1>
+      </header>
+
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
