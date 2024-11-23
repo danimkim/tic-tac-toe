@@ -1,57 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Player from './components/Player';
-import {
-  initialGameBoard,
-  PLAYER_1_MARK,
-  PLAYER_2_MARK,
-  WINNING_COMBINATIONS,
-} from './constants';
+import { PLAYER_1_MARK, PLAYER_2_MARK, PLAYERS } from './constants';
 import Log from './components/Log';
-import { deriveActivePlayer } from './utils';
+import { deriveActivePlayer, deriveGameBoard, deriveWinner } from './utils';
 import GameOver from './components/GameOver';
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-  const [players, setPlayers] = useState({
-    [PLAYER_1_MARK]: 'Player1',
-    [PLAYER_2_MARK]: 'Player2',
-  });
+  const [players, setPlayers] = useState(PLAYERS);
 
   const activePlayer = useMemo(
     () => deriveActivePlayer(gameTurns),
     [gameTurns]
   );
-
-  let gameBoard = [...initialGameBoard.map((arr) => [...arr])];
-
-  for (const turn of gameTurns) {
-    const {
-      square: { row, col },
-      player,
-    } = turn;
-
-    gameBoard[row][col] = player;
-  }
-
-  let winner;
-
-  for (const combination of WINNING_COMBINATIONS) {
-    const firstSquareSymbol =
-      gameBoard[combination[0].row][combination[0].column];
-    const secontSquareSymbol =
-      gameBoard[combination[1].row][combination[1].column];
-    const thirdSquareSymbol =
-      gameBoard[combination[2].row][combination[2].column];
-
-    if (
-      firstSquareSymbol &&
-      firstSquareSymbol === secontSquareSymbol &&
-      firstSquareSymbol === thirdSquareSymbol
-    ) {
-      winner = players[firstSquareSymbol];
-    }
-  }
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
 
   const hasDraw = useMemo(
     () => gameTurns.length === 9 && !winner,
@@ -74,7 +38,7 @@ function App() {
     });
   };
 
-  const handleRestart = () => setGameTurns([]);
+  const handleRestart = useCallback(() => setGameTurns([]), []);
 
   return (
     <main>
@@ -82,13 +46,13 @@ function App() {
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            defaultName={'Player1'}
+            defaultName={PLAYERS.PLAYER_1_NAME}
             symbol={PLAYER_1_MARK}
             isActive={activePlayer === PLAYER_1_MARK}
             onChangeName={handlePlayerNameChange}
           />
           <Player
-            defaultName="Player2"
+            defaultName={PLAYERS.PLAYER_2_NAME}
             symbol={PLAYER_2_MARK}
             isActive={activePlayer === PLAYER_2_MARK}
             onChangeName={handlePlayerNameChange}

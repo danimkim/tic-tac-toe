@@ -1,7 +1,12 @@
 export const PLAYER_1_MARK = 'X';
 export const PLAYER_2_MARK = 'O';
 
-export const initialGameBoard = [
+export const PLAYERS = {
+  PLAYER_1_NAME: 'Player1',
+  PLAYER_2_NAME: 'Player2',
+};
+
+export const INITIAL_GAMEBOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
